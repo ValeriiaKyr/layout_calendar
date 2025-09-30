@@ -1,0 +1,96 @@
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.calendar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  padding: $padding;
+  gap: $gap;
+  width: $calendar-width;
+  box-sizing: border-box;
+
+  &__day {
+    display: flex;
+    height: $day-cell;
+    width: $day-cell;
+    position: relative;
+    box-sizing: border-box;
+    border: $border-width solid $border-color;
+    font-family: Arial, sans-serif;
+    font-size: 30px;
+    background-color: $bg-main-color;
+    align-items: center;
+    justify-content: center;
+    transition:
+      background-color $animation-duration ease,
+      box-shadow $animation-duration ease;
+
+    &:hover {
+      cursor: pointer;
+      background-color: $hover-color;
+      transform: translateY(-20px);
+    }
+  }
+
+  @for $length from 28 through 31 {
+    $hide-from: $length + 1;
+    &--month-length-#{$length} {
+      .calendar__day {
+        &:nth-child(n + #{$length + 1}) {
+          display: none;
+        }
+      }
+    }
+  }
+
+  @each $day in $days {
+    $offset: 0;
+
+    @if $day == mon {
+      $offset: 0;
+    }
+
+    @if $day == tue {
+      $offset: ($day-cell + $gap);
+    }
+
+    @if $day == wed {
+      $offset: ($day-cell + $gap) * 2;
+    }
+
+    @if $day == thu {
+      $offset: ($day-cell + $gap) * 3;
+    }
+
+    @if $day == fri {
+      $offset: ($day-cell + $gap) * 4;
+    }
+
+    @if $day == sat {
+      $offset: ($day-cell + $gap) * 5;
+    }
+
+    @if $day == sun {
+      $offset: ($day-cell + $gap) * 6;
+    }
+
+    &--start-day-#{$day} {
+      .calendar__day:first-child {
+        margin-left: $offset;
+      }
+    }
+  }
+}
+
+@for $i from 1 through 31 {
+  .calendar__day:nth-child(#{$i})::before {
+    content: '#{$i}';
+  }
+}
